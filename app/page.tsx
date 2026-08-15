@@ -51,6 +51,7 @@ const faqs = [
 ] as const;
 
 const links = ["Home", "Services", "Gallery", "About", "Reviews", "Contact"];
+const contactEmail = "twobucklawncare@gmail.com";
 
 function Logo() {
   return (
@@ -93,6 +94,20 @@ export default function Home() {
 
   function submitEstimate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const subject = `Estimate request from ${form.get("name")}`;
+    const body = [
+      `Name: ${form.get("name")}`,
+      `Phone: ${form.get("phone")}`,
+      `Email: ${form.get("email")}`,
+      `Service: ${form.get("service")}`,
+      `Property address: ${form.get("address")}`,
+      "",
+      "Project description:",
+      String(form.get("details") || "Not provided"),
+    ].join("\n");
+
+    window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
   }
 
@@ -157,8 +172,8 @@ export default function Home() {
 
         <section className="section-pad map-section"><div className="container"><div className="map-wrap reveal"><div className="map-info"><span className="eyebrow">Service Area</span><h3>Proudly serving the Farmington Valley</h3><p>Based in Connecticut and focused on the Farmington Valley region. If you’re nearby and don’t see your town listed, reach out — we’re always expanding.</p><div className="towns">{["Avon", "Simsbury", "Canton", "Farmington", "Unionville", "Burlington", "Granby"].map((town) => <span key={town}>{town}</span>)}</div></div><div className="map-frame"><iframe src="https://www.google.com/maps?q=Farmington+Valley,+CT&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Two Buck Lawn Care service area map" /></div></div></div></section>
 
-        <section className="section-pad contact" id="contact"><div className="container contact-grid"><div className="contact-info reveal"><span className="eyebrow">Get In Touch</span><h2>Request your free estimate.</h2><p>Tell us about your property and what you need done — we’ll get back to you within one business day with a clear, no-pressure quote.</p><div className="contact-line"><div className="ic">☎</div><div><strong>(203) 441-7687</strong><span>Call or text anytime</span></div></div><div className="contact-line"><div className="ic">↗</div><div><strong>twobucklawncare.com</strong><span>Online estimate requests welcome</span></div></div><div className="contact-line"><div className="ic">⌖</div><div><strong>Farmington Valley, CT</strong><span>Avon · Simsbury · Canton · Farmington</span></div></div></div>
-          <div className="form-card reveal"><form onSubmit={submitEstimate}>{sent ? <div className="form-success show"><div className="ic">✓</div><h3>Request received!</h3><p>Thanks for reaching out — a member of our team will call or email you within one business day.</p></div> : <div><div className="form-row"><div className="field"><label htmlFor="name">Full Name</label><input id="name" name="name" required autoComplete="name" /></div><div className="field"><label htmlFor="phone">Phone</label><input type="tel" id="phone" name="phone" required autoComplete="tel" /></div></div><div className="form-row"><div className="field"><label htmlFor="email">Email</label><input type="email" id="email" name="email" required autoComplete="email" /></div><div className="field"><label htmlFor="service">Service Needed</label><select id="service" name="service" required defaultValue=""><option value="" disabled>Select a service</option>{services.map(([title]) => <option key={title}>{title}</option>)}<option>Other</option></select></div></div><div className="field"><label htmlFor="address">Property Address</label><input id="address" name="address" required autoComplete="street-address" /></div><div className="field"><label htmlFor="details">Project Description</label><textarea id="details" name="details" placeholder="Tell us a bit about your property and what you’d like done..." /></div><button type="submit" className="btn btn-dark full-width">Request Free Estimate</button><p className="form-note">We typically respond within one business day. No spam, ever.</p></div>}</form></div>
+        <section className="section-pad contact" id="contact"><div className="container contact-grid"><div className="contact-info reveal"><span className="eyebrow">Get In Touch</span><h2>Request your free estimate.</h2><p>Tell us about your property and what you need done — we’ll get back to you within one business day with a clear, no-pressure quote.</p><div className="contact-line"><div className="ic">☎</div><div><strong>(203) 441-7687</strong><span>Call or text anytime</span></div></div><div className="contact-line"><div className="ic">↗</div><div><strong><a href={`mailto:${contactEmail}`}>{contactEmail}</a></strong><span>Email estimate requests welcome</span></div></div><div className="contact-line"><div className="ic">⌖</div><div><strong>Farmington Valley, CT</strong><span>Avon · Simsbury · Canton · Farmington</span></div></div></div>
+          <div className="form-card reveal"><form onSubmit={submitEstimate}>{sent ? <div className="form-success show"><div className="ic">✓</div><h3>Email draft opened!</h3><p>Review the estimate request in your email app, then click send. It is addressed to {contactEmail}.</p></div> : <div><div className="form-row"><div className="field"><label htmlFor="name">Full Name</label><input id="name" name="name" required autoComplete="name" /></div><div className="field"><label htmlFor="phone">Phone</label><input type="tel" id="phone" name="phone" required autoComplete="tel" /></div></div><div className="form-row"><div className="field"><label htmlFor="email">Email</label><input type="email" id="email" name="email" required autoComplete="email" /></div><div className="field"><label htmlFor="service">Service Needed</label><select id="service" name="service" required defaultValue=""><option value="" disabled>Select a service</option>{services.map(([title]) => <option key={title}>{title}</option>)}<option>Other</option></select></div></div><div className="field"><label htmlFor="address">Property Address</label><input id="address" name="address" required autoComplete="street-address" /></div><div className="field"><label htmlFor="details">Project Description</label><textarea id="details" name="details" placeholder="Tell us a bit about your property and what you’d like done..." /></div><button type="submit" className="btn btn-dark full-width">Request Free Estimate</button><p className="form-note">We typically respond within one business day. No spam, ever.</p></div>}</form></div>
         </div></section>
       </main>
 
